@@ -1,0 +1,20 @@
+preprocessing:
+  dataset: geuv
+  align:
+  split:
+    test_size: 0.2
+structure_learning:
+  pairwise_inference:
+    network_type: p
+  network_inference:
+    fdr_prior: 0.6
+  featurize:
+modeling:
+  train: 
+    learning_rate: 0.01
+    num_iterations: 10000
+    weight_prior_std: 1
+    feature_selection:
+        number_of_features: 10
+
+
