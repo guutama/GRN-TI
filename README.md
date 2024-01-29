@@ -7,9 +7,9 @@ The GRN-TI (Gene Regulatory Network - Transcriptome Imputations) Pipeline is des
 ## Workflow Overview
 Our pipeline consists of several distinct and interconnected stages, outlined in Figure 1 (see fig:gene_snp_matrices).
 
-1. <span style="color:red;">Data Preprocessing</span>
+ 1. ### <span style="color:red;">Data Preprocessing</span>
 
-### SNP Genotype Data Conversion
+>SNP Genotype Data Conversion
 
 Converting raw genotype data in vcf format into a matrix of SNP genotypes. The resulting matrix contains values of 0, 1, 2, or 'NA', corresponding to the major homozygous genotype, the heterozygous genotype, the minor homozygous genotype, and missing data, respectively.
 
@@ -39,10 +39,14 @@ Key Flags Explained:
 
 Gene Expression Data: We begin with raw gene expression data for a specific set of genes (denoted A to F).
 Identification of cis-eQTLs: Top cis-eQTLs (E1 to E6) corresponding to these genes are identified, with matching colors between eQTLs and genes indicating their correspondence.
-2. <span style="color:red;">Bayesian Inference and Network Reconstruction </span>
+
+2. ### <span style="color:red;">Bayesian Inference and Network Reconstruction </span>
+
+
 Bayesian Posterior Probabilities: Utilizing the Findr-tool, we obtain Bayesian posterior probabilities, estimating the likelihood of interactions between genes.
 Network Reconstruction: These probabilities are used to reconstruct the GRN, employing a directed acyclic graph (DAG) structure.
-3. <span style="color:red;">Model Development and Deployment</span>
+
+3. ### <span style="color:red;">Model Development and Deployment</span>
 Prediction Model Training: Utilizing the GRN structure, we train a prediction model for each gene, incorporating both the gene's cis-eQTLs and the data from its parent genes in the network.
 Iterative Process: The prediction model undergoes an iterative refinement process, using gene expression and predicted gene expression inputs, represented by dashed lines in the workflow.
 Model Deployment: In the deployment phase, personal genotypes are used as inputs to predict individualized gene expression levels.
