@@ -1,0 +1,39 @@
+# datasets:
+#   paths:
+#   DATA_PATH: "/cluster/projects/nn1015k/GRN-TI/data"
+#   FINDR_PATH: "/cluster/projects/nn1015k/findr/libfindr.so"
+#   FILE_PATH: "{{ DATA_PATH }}/Geuvadis"
+#   EXP_PATH: "/cluster/projects/nn1015k/GRN-TI/data/Geuvadis/expression/raw"
+#   GENO_PATH: "/cluster/projects/nn1015k/GRN-TI/data/Geuvadis/expression/raw"
+#   GENO_PATH:
+#     files:
+#       exp_file: "GD462.GeneQuantRPKM.50FN.samplename.resk10.txt"
+#       geno_best_file: "merged_best.csv"
+#       geno_all_file: "merged_all.csv"
+#       map_best_file: "cleaned_best.rs137.txt.csv"
+#       map_all_file: "cleaned_all.rs137.txt.csv"
+
+  
+preprocessing:
+  expression_gene_id_col_name: 'TargetID'
+  mapping_gene_id_col_name: 'GENE_ID'
+  genotype_snp_id_cil_name: 'SNP'
+  mapping_snp_id_col_name: 'SNP_ID'
+  align:
+  split:
+    test_size: 0.2
+
+structure_learning:
+  pairwise_inference:
+    network_type: p
+  network_inference:
+    fdr_prior: 0.6
+  featurize:
+
+modeling:
+  train: 
+    learning_rate: 0.01
+    num_iterations: 10000
+    weight_prior_std: 1
+    feature_selection:
+      number_of_features: 10
