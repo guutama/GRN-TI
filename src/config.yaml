@@ -17,7 +17,7 @@
 preprocessing:
   expression_gene_id_col_name: 'TargetID'
   mapping_gene_id_col_name: 'GENE_ID'
-  genotype_snp_id_cil_name: 'SNP'
+  genotype_snp_id_col_name: 'SNP'
   mapping_snp_id_col_name: 'SNP_ID'
   align:
   split:

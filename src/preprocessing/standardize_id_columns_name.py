@@ -39,7 +39,7 @@ def process_file(dir_path, out_path, filename, check_column, rename_column=None,
     file_path = os.path.join(dir_path, filename)
     sep = '\t' if file_type == 'tsv' else ','
     df = read_csv_file(file_path, sep=sep)
-
+    print(df)
     # For mapping, check if both new_gene_id and new_snp_id exist
     if isinstance(check_column, list):
         if all(col in df.columns for col in check_column):
@@ -55,28 +55,6 @@ def process_file(dir_path, out_path, filename, check_column, rename_column=None,
 
 
 
-# def save_expression(dir_path, out_path, filename,old_id_name,new_id_name):
-#     file_path = os.path.join(dir_path, filename)
-#     df = pd.read_csv(file_path, sep='\t')
-#     df.rename(columns={old_id_name: new_id_name}, inplace=True)
-#     output_file = os.path.join(out_path, "expression.csv.gz")
-#     df.to_csv(output_file, index=False, compression='gzip')
-#     print(f"Expression data saved to {output_file}.")
-
-# def save_genotype(dir_path, out_path, filename, id_name,new_id_name ):
-#     file_path = os.path.join(dir_path, filename)
-#     df_all = pd.read_csv(file_path)
-#     df_all.rename(columns={id_name: new_id_name}, inplace=True)
-#     output_file_all = os.path.join(out_path, "genotype.csv.gz")
-#     df_all.to_csv(output_file_all, index=False, compression='gzip')
-  
- 
-
-# def save_mapping(dir_path, out_path, filename,new_gene_id,new_snp_id):
-#     file_path = os.path.join(dir_path, filename)
-#     df_all = pd.read_csv(file_path)
-#     output_file_all = os.path.join(out_path, "mapping.csv.gz")
-#     df_all.to_csv(output_file_all, index=False, compression='gzip')
 
 
 
@@ -95,6 +73,6 @@ if __name__ == "__main__":
 
     # Process each dataset with specific checks
     process_file(dir_path, out_path, 'mapping.csv', [mapping_gene_column, mapping_snp_column])
-    process_file(dir_path, out_path, 'expression.csv', expression_gene_column, mapping_gene_column)
+    process_file(dir_path, out_path, 'expression.tsv', expression_gene_column, mapping_gene_column,file_type='tsv')
     process_file(dir_path, out_path, 'genotype.csv', genotype_snp_column, mapping_snp_column)
     
