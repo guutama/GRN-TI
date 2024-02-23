@@ -18,9 +18,11 @@ MY_PATH = Path("/cluster/projects/nn1015k/GRN-TI")  # TODO: Needs to be updated
 
 
 DATA_PATH = MY_PATH / "data"
+RAW_PATH = DATA_PATH / "raw"
 RAW_CSV_TXT_PATH = DATA_PATH / "raw_csv_txt" 
 RAW_CSV_GZ_PATH = DATA_PATH / "raw_csv_gz" 
 ALIGNED_PATH = DATA_PATH / "aligned"
+SPLIT_PATH = DATA_PATH / "split"
 
 
 

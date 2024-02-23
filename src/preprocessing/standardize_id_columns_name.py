@@ -39,7 +39,7 @@ def process_file(dir_path, out_path, filename, check_column, rename_column=None,
     file_path = os.path.join(dir_path, filename)
     sep = '\t' if file_type == 'tsv' else ','
     df = read_csv_file(file_path, sep=sep)
-    print(df)
+  
     # For mapping, check if both new_gene_id and new_snp_id exist
     if isinstance(check_column, list):
         if all(col in df.columns for col in check_column):
@@ -60,7 +60,7 @@ def process_file(dir_path, out_path, filename, check_column, rename_column=None,
 
 if __name__ == "__main__":
     # Example directory paths
-    dir_path = RAW_CSV_TXT_PATH
+    in_path = RAW_CSV_TXT_PATH
     out_path = RAW_CSV_GZ_PATH
     config = yaml.safe_load(open('src/config.yaml'))
     preprocessing_params = config['preprocessing']
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     mapping_snp_column = preprocessing_params['mapping_snp_id_col_name']
 
     # Process each dataset with specific checks
-    process_file(dir_path, out_path, 'mapping.csv', [mapping_gene_column, mapping_snp_column])
-    process_file(dir_path, out_path, 'expression.tsv', expression_gene_column, mapping_gene_column,file_type='tsv')
-    process_file(dir_path, out_path, 'genotype.csv', genotype_snp_column, mapping_snp_column)
+    process_file(in_path, out_path, 'mapping.csv', [mapping_gene_column, mapping_snp_column])
+    process_file(in_path, out_path, 'expression.tsv', expression_gene_column, mapping_gene_column,file_type='tsv')
+    process_file(in_path, out_path, 'genotype.csv', genotype_snp_column, mapping_snp_column)
     

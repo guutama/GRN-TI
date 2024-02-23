@@ -1,4 +1,4 @@
-# GRN-TI: Gene Expression Prediction Using Gene Regulatory Networks
+# Predicting the genetic component of gene expression using gene regulatory networks
 
 ## Introduction
 
@@ -82,6 +82,41 @@ After processing the input data, the script outputs several files in compressed 
 - **All Genes Data (`all_genes.csv.gz`)**: Contains expression data for all genes in the input expression file, providing a dataset for more extensive analyses.
 
 This alignment is fundamental for the GRN-TI pipeline's success, setting the stage for accurate gene regulatory network reconstruction and subsequent gene expression prediction.
+
+
+
+### **Data Splitting for Training and Testing**
+
+ The `split_expression_genotype.py` splits data into training and test
+
+
+#### Input Format
+
+The script expects the following input files in compressed CSV format:
+
+- **Top SNP Data (`top_snp.csv.gz`)**: Genotype data for SNPs strongly associated with genes.
+- **All SNP Data (`all_snp.csv.gz`)**: Genotype data for all SNPs.
+- **Top Mapping Data (`top_mapping.csv.gz`)**: Mapping data for top-associated SNPs and genes.
+- **Top Genes Data (`top_genes.csv.gz`)**: Expression data for genes with significant eQTLs.
+- **All Genes Data (`all_genes.csv.gz`)**: Expression data for all genes.
+- **Sample Names (`sample_names.csv.gz`)**: A list of sample names containing sample both in SNP and Gene data.
+
+#### Output Format
+
+The script generates the following output files in compressed CSV format:
+
+- **Training and Testing Expression Data**: Separate files for top genes (`top_exp_train.csv.gz`, `top_exp_test.csv.gz`) and all genes (`all_exp_train.csv.gz`, `all_exp_test.csv.gz`).
+- **Training and Testing Genotype Data**: Separate files for top SNPs (`top_eqtl_train.csv.gz`, `top_eqtl_test.csv.gz`) and all SNPs (`all_eqtl_train.csv.gz`, `all_eqtl_test.csv.gz`).
+- **Sample Lists**: Lists of sample names used in the training (`train_sample.csv.gz`) and testing (`test_sample.csv.gz`) datasets.
+
+
+
+
+
+
+
+
+
 
 
 ### **Bayesian Inference and Network Reconstruction**
