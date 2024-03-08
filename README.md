@@ -1,14 +1,27 @@
-# Project Pipeline Overview
+# Predicting the genetic component of gene expression using gene regulatory networks
 
 ## Introduction
 
-This README presents a detailed overview of our data processing pipeline, designed to transform raw genetic data through several stages of preprocessing, structure learning, and modeling, ultimately producing valuable metrics for analysis. The pipeline is structured to ensure efficiency, modularity, and ease of understanding.
+This README presents a detailed overview of our  pipeline for building prediction method and model for genetic component of gene expression. This document provides an overview of our data transformation  stages of preprocessing, structure learning, and modeling, evaluation of the model's performance. 
+
 
 ---
 
-## Pipeline Structure and Workflow
+## Pipeline Stages
 
-Below is a detailed representation of the pipeline, formatted to suggest where colors could be applied if the platform supports HTML or custom Markdown rendering:
+### Preprocessing Stage
+
+The preprocessing stage prepares the raw data  by aligning expressions with genotypes and splitting the dataset into training and test sets.
+
+### Structure Learning Stage
+
+In the structure learning stage, the pipeline infers gene regulatory network and make input-output features for each gene in the network
+
+### Modeling Stage
+
+The final stage involves training the model on the featurized data and evaluating its performance.
+
+
 
 <pre>
 <code>
