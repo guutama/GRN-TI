@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # Example directory paths
     in_path = RAW_CSV_TXT_PATH
     out_path = RAW_CSV_GZ_PATH
-    config = yaml.safe_load(open('src/config.yaml'))
+    config = yaml.safe_load(open('src/param_config.yaml'))
     preprocessing_params = config['preprocessing']
 
     # Updated variable names for clarity

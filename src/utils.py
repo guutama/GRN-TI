@@ -193,4 +193,25 @@ def rank_inverse_normal_transformation(X, c=3/8):
     ipt = norm.ppf((ranks - c) / (n + 1 - 2*c))
    # $$\text{INT}(W_i) = \Phi^{-1} \left\{ \frac{\text{rank}(W_i) - c}{n+1-2c} \right\}, \quad c \in [0, \frac{1}{2}]$$
     
-    return ipt
+    return ipt 
+def melt_and_transform(input_data, id_vars, indices, columns, var_name, value_name):
+    # Check if input_data is a NumPy array and convert to DataFrame
+    if isinstance(input_data, np.ndarray):
+        input_data = pd.DataFrame(input_data, columns=columns)
+    
+    # If input_data is a DataFrame, make a copy to avoid modifying the original data
+    elif isinstance(input_data, pd.DataFrame):
+        input_data = input_data.copy()
+    else:
+        raise ValueError("Input must be a NumPy array or a pandas DataFrame.")
+
+    # Insert id_vars as first column
+    input_data.insert(loc=0, column=id_vars, value=indices)
+    
+    # Melt DataFrame
+    melted_df = pd.melt(input_data, id_vars=id_vars, value_vars=columns, var_name=var_name, value_name=value_name, ignore_index=False)
+    
+    # Reset index and drop old index
+    melted_df.reset_index(drop=True, inplace=True)
+    
+    return melted_df

@@ -141,7 +141,7 @@ def split(in_path,out_path,test_size):
 
 if __name__ == '__main__':
    
-    params=yaml.safe_load(open("src/config.yaml"))["preprocessing"]
+    params=yaml.safe_load(open("src/param_config.yaml"))["preprocessing"]
     params_split = params['split']
     
     in_path = ALIGNED_PATH

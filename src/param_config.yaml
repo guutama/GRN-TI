@@ -25,9 +25,10 @@ preprocessing:
 
 structure_learning:
   pairwise_inference:
-    network_type: p
+
   network_inference:
     fdr_prior: 0.6
+    network_type: p
   featurize:
 
 modeling:
@@ -37,3 +38,4 @@ modeling:
     weight_prior_std: 1
     feature_selection:
       number_of_features: 10
+  evaluate:

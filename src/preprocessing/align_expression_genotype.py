@@ -37,7 +37,7 @@ def filter_genes(exp,map,have_eQTL):
         genes = genes.reset_index(drop=True)
     return genes
 # Common functions
-def load_data(in_path, out_path):
+def align_data(in_path, out_path):
     exp_file =  os.path.join(in_path, "expression.csv.gz")
     # geno_file = os.path.join(in_path, 'genotypes.csv.gz')
     # mapping_file = os.path.join(in_path,'mappings.csv.gz')
@@ -114,12 +114,12 @@ def load_data(in_path, out_path):
     
 
 if __name__ == '__main__':
-    config = yaml.safe_load(open('src/config.yaml'))
+    config = yaml.safe_load(open('src/param_config.yaml'))
     in_path = RAW_CSV_GZ_PATH
     out_path = ALIGNED_PATH
     if not out_path.exists():
         out_path.mkdir(parents=True)
-    load_data(in_path=in_path,out_path=out_path)      
+    align_data(in_path=in_path,out_path=out_path)      
             
 
 

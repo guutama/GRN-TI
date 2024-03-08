@@ -2,12 +2,11 @@
 
 ## Introduction
 
-This README presents a detailed overview of our  pipeline for building prediction method and model for genetic component of gene expression. This document provides an overview of our data transformation  stages of preprocessing, structure learning, and modeling, evaluation of the model's performance. 
-
+This README presents a detailed overview of our  pipeline for building prediction method and model for genetic component of gene expression. This document provides an overview of our data transformation  stages of preprocessing, structure learning, and modeling. 
 
 ---
 
-## Pipeline Stages
+## Pipeline Stages 
 
 ### Preprocessing Stage
 
@@ -77,7 +76,9 @@ params_split = params['split']
 test_size = float(params_split['test_size'])
 ```
 
-## Pipeline Structure and Workflow
+## Pipeline Structure and Workflow 
+
+The flow of the pipeline is shown below. Each stage depends on the next stage solely through the data file, meaning if the data is provided in the correct format, the code for each stage will be independent of the others.
 
 <pre>
 <code>
