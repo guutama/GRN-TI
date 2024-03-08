@@ -29,6 +29,16 @@ The final stage involves training the model on the featurized data and evaluatin
 Our pipeline utilizes a path configuration file `/src/path_config.py` where all necessary paths for data  are defined. 
 
 Each Python file within our pipeline refers to these path configurations to read input data and store outputs. Here is an example demonstrating how scripts use the path configuration:
+```python
+#Example content of path_config.py file
+from pathlib import Path
+MY_PATH = Path("/cluster/projects/nn1015k/GRN-TI")  # TODO: Needs to be updated
+DATA_PATH = MY_PATH / "data"
+RAW_CSV_GZ_PATH = DATA_PATH / "raw_csv_gz" # Path to the raw CSV GZ files.
+ALIGNED_PATH = DATA_PATH / "aligned" # Path where aligned data is stored.
+SPLIT_PATH = DATA_PATH / "split" # Path for the split data.
+PAIRWISE_PROBABILITY_PATH =  DATA_PATH / "pairwise_probability" # Path for the output of pairwise inference.
+```
 
 ```python
 #How the align_expression_genotype.py file called
@@ -71,7 +81,7 @@ test_size = float(params_split['test_size'])
 
 <pre>
 <code>
-<span style="color: gray;">PROJECT ROOT</span>
+<span style="color: black;">PROJECT ROOT</span>
 ├── <span style="color: green;">src</span>
 │   ├── <span style="color: lightgreen;">preprocessing</span>
 │   │   ├── <span style="color: grey;">align_expression_genotype()</span> <!-- <br> -->
