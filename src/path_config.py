@@ -20,6 +20,9 @@ NETWORKS_INFO_PATH = DATA_PATH / "network_info"
 NETWORKS_PATH = DATA_PATH / "networks" 
 FEATURIZED_PATH = DATA_PATH / "featurized"
 
+MODELS_PATH = MY_PATH / 'models'
+METRICES_PATH = MY_PATH / 'metrices'
+
 
 
 

@@ -1,19 +1,13 @@
 
-import math
-import torch
-import pyro
-import gpytorch
-from matplotlib import pyplot as plt
 
-from sklearn.feature_selection import SelectFromModel
+
 
 
 import os
 import sys
 import joblib
 import json
-import multiprocessing
-from tqdm import tqdm
+
 directories_to_append = [
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..')),
     os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
@@ -23,22 +17,19 @@ for directory in directories_to_append:
     sys.path.append(directory)
 
 from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import r_regression
-from sklearn.linear_model import BayesianRidge
+
 import numpy as np
 import networkx as nx
-import pyro
-import pyro.distributions as dist
-import torch
+
+
+
 import yaml
 import pickle
 import networkx as nx 
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.ensemble import RandomForestRegressor
 
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import KFold, cross_val_score
+from matplotlib import pyplot as plt
 
 from sklearn.metrics import (
     mean_absolute_percentage_error,
@@ -48,8 +39,16 @@ from sklearn.metrics import (
     make_scorer
 )
 from path_config import (
- FEATURIZED_PATH
+    FEATURIZED_PATH ,
+    MODELS_PATH,
+    METRICES_PATH,
+ 
 )
+
+from modelling.linear_sk_models import (
+    regularized_ensemble_models 
+)
+
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import LinearRegression
@@ -88,18 +87,19 @@ def load_graph(graph_path,network_type='p'):
    
 
    
-def train_and_evaluate_model(X_train, y_train, X_test, y_test, node, input_type, n_splits, seed=0):
-    # Initialize the BayesianRidge model
-    model = BayesianRidge(tol=1e-6, compute_score=True, max_iter=10000)
-    # Fit the model on the entire training dataset
+def train_and_evaluate_model(X_train, y_train, X_test, y_test, node, input_type, model_type):
+    model  = regularized_ensemble_models[model_type]
+    
     model.fit(X_train, y_train)
 
-    # Evaluate the model on the test dataset
+    # Predict on test datase.   
     pred = model.predict(X_test)
-    test_score = explained_variance_score(y_test, pred)
-    print(f"{node}: Explained Variance Score {input_type} (Test Set): {test_score}", flush=True)
 
-    return model, pred, test_score
+    # Calculate performance metrics on test dataset
+    explained_var_score = r2_score(y_test, pred)
+    print(f"{node}: Explained Variance Score {input_type} (Test Set): {explained_var_score}", flush=True)
+
+    return model, pred, explained_var_score
 
 def scale_data(X_train, X_test):
     scaler = StandardScaler()
@@ -117,7 +117,7 @@ def kbest_method(X,Xt,y):
         return X_train,X_test,selector
     else:
         return X,Xt,None
-def process_node(node, G, model_type,seed):
+def process_node(node, G, input_type,model_type):
     """
     Process a node in the graph and train the specified model.
 
@@ -137,24 +137,35 @@ def process_node(node, G, model_type,seed):
     y_test = np.array(G_te.nodes[node]['y_test']).reshape(-1,)
     
 
-    if model_type == 'eqtl_expression':
+    if input_type == 'eqtl_expression':
         Xparent = G_tr.nodes[node].get('p_train')
         if Xparent is None:
             X, X_test = G_tr.nodes[node]['g_train'], G_te.nodes[node]['g_test']
-            # X, X_test,selector_g = kbest_method(X=X_g,Xt=X_test_g,y=y)
             scaler_p = None
             scaler_g = None
          
-            
         else:
             X_g, X_test_g = G_tr.nodes[node]['g_train'], G_te.nodes[node]['g_test']
             X_p, X_test_p,scaler_p = scale_data(G_tr.nodes[node].get('p_train'), G_te.nodes[node]['p_test'])
             scaler_g = None
-            # X_g, X_test_g,selector_g = kbest_method(X=X_g,Xt=X_test_g,y=y)
-            # X_p, X_test_p,selector_p = kbest_method(X=X_p,Xt=X_test_p,y=y)
+           
 
             X = concat_arrays(X_g, X_p)
+            X_test = concat_arrays(X_test_g, X_test_p) 
+    elif input_type == 'eqtl_all':
+        Xparent = G_tr.nodes[node].get('g_train_parent')
+        if Xparent is None:
+            X, X_test = G_tr.nodes[node]['g_train'], G_te.nodes[node]['g_test']
+            scaler_g,scaler_p = None,None
+        else:
+            X_g, X_test_g = G_tr.nodes[node]['g_train'], G_te.nodes[node]['g_test']
+            X_p, X_test_p= G_tr.nodes[node].get('g_train_parent'), G_te.nodes[node]['g_test_parent']
+            X = concat_arrays(X_g, X_p)
             X_test = concat_arrays(X_test_g, X_test_p)
+            scaler_g,scaler_p = None,None
+    elif input_type == 'eqtl':
+        X, X_test = G_tr.nodes[node]['g_train'], G_te.nodes[node]['g_test']
+        scaler_g,scaler_p = None,None
     else:
         raise ValueError("Invalid model_type. Choose from 'eqtl', 'parent', 'both'.")
 
@@ -163,9 +174,9 @@ def process_node(node, G, model_type,seed):
                                                 X_test=X_test, 
                                                 y_test=y_test, 
                                                 node=node, 
-                                                input_type=model_type, 
-                                                n_splits=3, 
-                                                seed=seed)
+                                                input_type=input_type, 
+                                                model_type = model_type
+                                                )
     return model,pred,score, scaler_g,scaler_p
 
 
@@ -190,46 +201,36 @@ def save_partial_results(models, r2_test, out_models_path, out_scores_test):
         json.dump(r2_test, file)
 if __name__ == '__main__':
 
-    RANDOM_SEED = 8927
-    rng = default_rng(RANDOM_SEED)
+    
+    params=yaml.safe_load(open("src/param_config.yaml"))["modelling"]['train']
+    params_struc = yaml.safe_load(open('src/param_config.yaml'))['structure_learning']
+    params_pairwise = params_struc['pairwise_inference']
+    params_network =params_struc['network_inference']
+    
 
+
+    RANDOM_SEED = params['random_state']
+    rng = default_rng(RANDOM_SEED)
+    model_type = params['model_type']
+    network_type = params_network['network_type']
+    input_type = params['input_type']
+ 
+    graph_path=FEATURIZED_PATH
+    models_path=MODELS_PATH / model_type
+    metrices_path = METRICES_PATH / model_type
 
  
-    graph_path=GEUV_SPLIT_FEA_PATH
-    models_path=MODELS_PATH
-    metrices_path = BRIDGE_R2
-    # seed = 42
-    # random.seed(seed)
-    # np.random.seed(seed)
     if not models_path.exists():
         models_path.mkdir(parents=True)
     if not metrices_path.exists():
         metrices_path.mkdir(parents=True)
-    if not DIST_PLOT_PATH.exists():
-        DIST_PLOT_PATH.mkdir(parents=True)
- 
-
-        
-    params =yaml.safe_load(open("src/params.yaml"))["modeling"]
-    params_feature = params["feature_selection"]
-    params_train = params['train']
-
-    params_struc = yaml.safe_load(open('src/params.yaml'))['structure_learning']
-    params_pairwise = params_struc['pairwise_inference']
-    network_type = 'fdr20_p' #params_pairwise['network_type']
-
-
-    number_of_features = params_feature["number_of_features"]
-    learning_rate = params_train['learning_rate']
-    num_iterations = params_train['num_iterations']
-    weight_prior_std = params_train['weight_prior_std']
-    num_parallel_processes = 4  
-    n_splits = 10        
-    print(network_type,flush=True)
+           
+    print(network_type,flush=True) 
+    
 
     G = load_graph(graph_path,network_type=network_type)
-    model_to_train = 'eqtl_expression'
-    name_extention = f'bridge_{network_type}_{model_to_train}'
+    
+    name_extention = f'{model_type}_{network_type}_{input_type}'
 
     models = {}
     r2_test = {}
@@ -252,7 +253,7 @@ if __name__ == '__main__':
     total_nodes = len(un_sorted_nodes)
     
     for i, node in enumerate(un_sorted_nodes):
-        model,pred,score, scaler_g,scaler_p= process_node(node, G,model_type=model_to_train,seed=RANDOM_SEED)
+        model,pred,score, scaler_g,scaler_p= process_node(node, G,input_type=input_type)
         
         # Update models, r2_train, r2_test as needed
         models[node] = model
@@ -276,55 +277,46 @@ if __name__ == '__main__':
     # Save final results
     save_partial_results(models, r2_test, out_models_path, out_scores_test)
 
-
-    for i, node in enumerate(un_sorted_nodes):
-
-           
-        G_te = G['test_all_eQTL_G']
-        Xparent = G_te.nodes[node].get('p_test')
-        if Xparent is not None:
-            model = models[node]
-            parents = list(G_te.predecessors(node))
-            scaler_g = scalers_g[node]
-            scaler_p =scalers_p[node]
-           
-            y_test = np.array(G_te.nodes[node]['y_test']).reshape(-1,)
+    if input_type == 'eqtl_expression':
+        for i, node in enumerate(un_sorted_nodes):
+            G_te = G['test_all_eQTL_G']
+            Xparent = G_te.nodes[node].get('p_test')
+            if Xparent is not None:
+                model = models[node]
+                parents = list(G_te.predecessors(node))
+                scaler_g = scalers_g[node]
+                scaler_p =scalers_p[node]
             
-            parents_preds = [preds[parent] for parent in parents]
-            parents_preds = [arr.reshape(-1,1) for arr in parents_preds]
-            parents_preds = np.concatenate(parents_preds,axis=1)
-            num_parents = len(parents)
-            assert num_parents == Xparent.shape[1]
-            parents_preds = parents_preds.reshape(-1, num_parents)
+                y_test = np.array(G_te.nodes[node]['y_test']).reshape(-1,)
+                
+                parents_preds = [preds[parent] for parent in parents]
+                parents_preds = [arr.reshape(-1,1) for arr in parents_preds]
+                parents_preds = np.concatenate(parents_preds,axis=1)
+                num_parents = len(parents)
+                assert num_parents == Xparent.shape[1]
+                parents_preds = parents_preds.reshape(-1, num_parents)
 
-            X_g = G_te.nodes[node]['g_test']
-            X_p = scaler_p.transform(parents_preds)
+                X_g = G_te.nodes[node]['g_test']
+                X_p = scaler_p.transform(parents_preds)
+                X_test = concat_arrays(X_g, X_p)
 
-            # X_g = selector_g.transform(X_g) if selector_g is not None else X_g
-            # X_p = selector_p.transform(X_p) if selector_p is not None else X_p
-            X_test = concat_arrays(X_g, X_p)
+                pred = model.predict(X_test)
+                test_score = explained_variance_score(y_test, pred)
+                print(f"{node}: Average R2  : {test_score}", flush=True)
+                pred_pred_score[node]=test_score
 
-            pred = model.predict(X_test)
-            test_score = explained_variance_score(y_test, pred)
-            print(f"{node}: Average R2  : {test_score}", flush=True)
-            pred_pred_score[node]=test_score
-    
-        # Print R2 scores
-    
-            
+                if (i + 1) % 10 == 0:
+                    with open(out_scores_pred , 'w') as file:
+                        json.dump(pred_pred_score, file)
 
-            if (i + 1) % 10 == 0:
-                with open(out_scores_pred , 'w') as file:
-                    json.dump(pred_pred_score, file)
-
-            progress = ((i + 1) / total_nodes) * 100
-            print(f"Processed {i + 1}/{total_nodes} nodes ({progress:.2f}% complete)", flush=True)
+                progress = ((i + 1) / total_nodes) * 100
+                print(f"Processed {i + 1}/{total_nodes} nodes ({progress:.2f}% complete)", flush=True)
 
 
-        else:
-            pred_pred_score[node]=None
-    with open(out_scores_pred , 'w') as file:
-        json.dump(pred_pred_score, file)
+            else:
+                pred_pred_score[node]=None
+        with open(out_scores_pred , 'w') as file:
+            json.dump(pred_pred_score, file)
 
 
 
