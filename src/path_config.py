@@ -8,13 +8,14 @@ from pathlib import Path
 FINDR_PATH = "/cluster/projects/nn1015k/findr/libfindr.so"  # TODO: Needs to be updated
 
 # Path to GRN-TI - Update this path according to your environment
-MY_PATH = Path("/cluster/projects/nn1015k/GRN-TI")  # TODO: Needs to be updated
+MY_PATH = Path("/cluster/projects/nn1015k/GRN-TI")  # TODO: Needs to be modified
 DATA_PATH = MY_PATH / "data"
 RAW_PATH = DATA_PATH / "raw"
-RAW_CSV_TXT_PATH = DATA_PATH / "raw_csv_txt" 
-RAW_CSV_GZ_PATH = DATA_PATH / "raw_csv_gz" 
-ALIGNED_PATH = DATA_PATH / "aligned"
-SPLIT_PATH = DATA_PATH / "split"
+PREPROCESSED_PATH = DATA_PATH / "preprocessed"
+RECODED_PATH = PREPROCESSED_PATH / "recoded"
+MERGED_PATH = PREPROCESSED_PATH / "merged"
+ALIGNED_PATH = PREPROCESSED_PATH / "aligned"
+SPLIT_PATH = PREPROCESSED_PATH / "split"
 PAIRWISE_PROBABILITY_PATH =  DATA_PATH / "pairwise_probability"
 NETWORKS_INFO_PATH = DATA_PATH / "network_info"
 NETWORKS_PATH = DATA_PATH / "networks" 
