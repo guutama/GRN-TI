@@ -1,6 +1,7 @@
 preprocessing:
   geuvadis:
     genotype_file: 'best' # all
+    mapping_file_name: EUR373.gene.cis.FDR5.best.rs137.txt # EUR373.gene.cis.FDR5.all.rs137.txt
   expression_gene_id_col_name: 'TargetID'
   mapping_gene_id_col_name: 'GENE_ID'
   genotype_snp_id_col_name: 'SNP'

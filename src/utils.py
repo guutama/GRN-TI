@@ -185,7 +185,7 @@ def rank_inverse_normal_transformation(X, c=3/8):
         2-D array of IPT values with the same shape as X.
     """
     # Get the ranks of the data
-    ranks = rankdata(X, axis=1, method="ordinal")
+    ranks = rankdata(X, axis=1, method='average')
 #np.apply_along_axis(np.argsort, 0, np.argsort(X, axis=0))
     
     # Compute the IPT values
