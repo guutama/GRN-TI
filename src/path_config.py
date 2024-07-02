@@ -15,6 +15,16 @@ GEUVADIS_PATH = RAW_PATH / "geuvadis"
 MAPPING_PATH = GEUVADIS_PATH / 'mapping'
 EXPRESSION_PATH = GEUVADIS_PATH / "expression"
 GENOTYPE_PATH = GEUVADIS_PATH / "genotype"
+
+
+DREAM_PATH = RAW_PATH / "dream"
+
+
+
+
+
+
+
 PREPROCESSED_PATH = DATA_PATH / "preprocessed"
 MAPPING_PROCESSED = PREPROCESSED_PATH / "mapping_processed"
 RECODED_PATH = PREPROCESSED_PATH / "recoded"
@@ -29,6 +39,9 @@ FEATURIZED_PATH = DATA_PATH / "featurized"
 
 MODELS_PATH = MY_PATH / 'models'
 METRICES_PATH = MY_PATH / 'metrices'
+
+
+
 
 
 

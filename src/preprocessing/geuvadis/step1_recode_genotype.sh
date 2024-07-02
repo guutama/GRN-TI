@@ -3,16 +3,18 @@
 
 
 # commonpath is the base directory path provided as a command-line argument
-commonpath="$1"
+commonpath="$1" 
+
+geuvadispath="${commonpath}raw/geuvadis/"
 
 # inputfilepath is the directory containing raw genotype VCF files
-inputfilepath="${commonpath}raw/genotypes/"
+inputfilepath="${geuvadispath}/genotypes/"
 
 # outputfilepath is the directory where the processed files will be saved
 outputfilepath="${commonpath}preprocessed/recoded/"
 
 # sampleinfofile contains sample information
-sampleinfofile="${commonpath}raw/info/E-GEUV-1.sdrf.txt"
+sampleinfofile="${geuvadispath}raw/info/E-GEUV-1.sdrf.txt"
 
 # idconvertfile is used to update SNP IDs in the VCF files
 idconvertfile="${inputfilepath}dbSnp137_idconvert_unique.txt"
