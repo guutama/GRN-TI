@@ -1,9 +1,21 @@
-import os
+import os,sys
 import numpy as np
 import pandas as pd
 import yaml
 from utils import rank_inverse_normal_transformation
-from path_config import ALIGNED_PATH, SPLIT_PATH
+from path_config import ALIGNED_PATH, SPLIT_PATH 
+
+
+# Append directories to sys.path for module imports
+directories_to_append = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), '..')),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')),
+    # Add more directories as needed
+]
+for directory in directories_to_append:
+    sys.path.append(directory)
+for directory in directories_to_append:
+    sys.path.append(directory)
 
 # Load preprocessing parameters from YAML configuration file
 params = yaml.safe_load(open("src/param_config.yaml"))["preprocessing"]

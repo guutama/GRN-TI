@@ -10,6 +10,7 @@ import os
 # Append directories to sys.path for module imports
 directories_to_append = [
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..')),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')),
     # Add more directories as needed
 ]
 for directory in directories_to_append:
