@@ -87,25 +87,25 @@ The flow of the pipeline is shown below. Each stage depends on the next stage so
 ├── <span style="color: green;">src</span>
 │   ├── <span style="color: lightgreen;">preprocessing</span>
 │   │   ├── <span style="color: grey;">geuvadis</span>
-│   │   │   ├── script1.py
+│   │   │   ├── script.py
 │   │   ├── <span style="color: grey;">dream</span>
-│   │   │   ├── script1.py
+│   │   │   ├── script.py
 │   │   └── <span style="color: grey;">yeast</span>
-│   │       ├── script1.py
+│   │       ├── script.py
 │   ├── <span style="color: skyblue;">structure_learning</span>
 │   │   ├── <span style="color: grey;">geuvadis</span>
-│   │   │   ├── script1.py
+│   │   │   ├── script.py
 │   │   ├── <span style="color: grey;">dream</span>
-│   │   │   ├── script1.py
+│   │   │   ├── script.py
 │   │   └── <span style="color: grey;">yeast</span>
-│   │       ├── script1.py
+│   │       ├── script.py
 │   └── <span style="color: darkgreen;">modeling</span>
 │       ├── <span style="color: grey;">geuvadis</span>
-│       │   └── script1.py
+│       │   └── script.py
 │       ├── <span style="color: grey;">dream</span>
-│       │   └── script1.py
+│       │   └── script.py
 │       └── <span style="color: grey;">yeast</span>
-│           └── script1.py
+│           └── script.py
 │   ├── param_config.yaml
 │   ├── path_config.py
 │   └── utils.py
